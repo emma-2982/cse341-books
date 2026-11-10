@@ -1,5 +1,9 @@
 import express from 'express';
-import { getBooksHandler, getBookByIdHandler } from './controllers/books.js';
+import {
+    getBooksHandler, getBookByIdHandler, createBookHandler,
+    updateBookHandler,
+    deleteBookHandler
+} from './controllers/books.js';
 import { getAllAuthors, getAuthorById, createAuthor, updateAuthor, deleteAuthor } from './controllers/authors.js';
 
 
@@ -188,6 +192,120 @@ const router = express.Router();
  */
 
 
+/**
+ * @openapi
+ * /books:
+ *   post:
+ *     summary: Create a new book
+ *     tags:
+ *       - Books
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *               - title
+ *               - authorId
+ *               - publicationDate
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 example: b4
+ *               title:
+ *                 type: string
+ *                 example: Things Fall Apart
+ *               authorId:
+ *                 type: string
+ *                 example: a1
+ *               publicationDate:
+ *                 type: string
+ *                 format: date
+ *                 example: 1958-06-17
+ *     responses:
+ *       201:
+ *         description: Book created successfully
+ *       400:
+ *         description: Missing required fields or specified author does not exist
+ *       500:
+ *         description: Unable to create book
+ */
+
+
+/**
+ * @openapi
+ * /books/{id}:
+ *   put:
+ *     summary: Update a book by ID
+ *     tags:
+ *       - Books
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The custom book ID, such as b1
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - authorId
+ *               - publicationDate
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: Updated Book Title
+ *               authorId:
+ *                 type: string
+ *                 example: a1
+ *               publicationDate:
+ *                 type: string
+ *                 format: date
+ *                 example: 1960-01-01
+ *     responses:
+ *       200:
+ *         description: Book updated successfully
+ *       400:
+ *         description: Missing required fields or specified author does not exist
+ *       404:
+ *         description: Book not found
+ *       500:
+ *         description: Unable to update book
+ */
+
+
+/**
+ * @openapi
+ * /books/{id}:
+ *   delete:
+ *     summary: Delete a book by ID
+ *     tags:
+ *       - Books
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: The custom book ID, such as b1
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Book deleted successfully
+ *       404:
+ *         description: Book not found
+ *       500:
+ *         description: Unable to delete book
+ */
+
+
+
 router.get('/books', getBooksHandler);
 router.get('/books/:id', getBookByIdHandler);  
 router.get('/authors', getAllAuthors);
@@ -195,5 +313,8 @@ router.get('/authors/:id', getAuthorById);
 router.post('/authors', createAuthor);
 router.put('/authors/:id', updateAuthor);
 router.delete('/authors/:id', deleteAuthor);
+router.post('/books', createBookHandler);
+router.put('/books/:id', updateBookHandler);
+router.delete('/books/:id', deleteBookHandler);
 
 export default router;
