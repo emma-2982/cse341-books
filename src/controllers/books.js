@@ -14,6 +14,7 @@ const getBooksHandler = async (req, res) => {
 const getBookByIdHandler = async (req, res) => {
     const requestedId = req.params.id;
 
+    
     try {
         const book = await getBookById(requestedId);
 
